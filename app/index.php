@@ -13,7 +13,7 @@ $pdo = getDBConnection();
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->execute([id]);
+    $stmt->execute([$id]);
     header("Location: index.php?msg=deleted");
     exit();
 }
