@@ -5,15 +5,13 @@ services:
     container_name: nginx_server
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./app:/var/www/html
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
     depends_on:
       - php
     networks:
-      - web_network
+      - it302_network
 
   # PHP 8.2 with FPM - Custom build with all extensions
   php:
@@ -27,24 +25,24 @@ services:
     depends_on:
       - mysql
     networks:
-      - web_network
+      - it302_network
 
   # MySQL database
   mysql:
     image: mysql:8.0
     container_name: mysql_db
     environment:
-      MYSQL_ROOT_PASSWORD: default
-      MYSQL_DATABASE: default
-      MYSQL_USER: default
-      MYSQL_PASSWORD: default
+      MYSQL_ROOT_PASSWORD: it302_anong
+      MYSQL_DATABASE: it302_anong
+      MYSQL_USER: it302_anong
+      MYSQL_PASSWORD: it302_anong
     ports:
       - "3306:3306"
     volumes:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/init:/docker-entrypoint-initdb.d
     networks:
-      - web_network
+      - it302_network
     command: --default-authentication-plugin=mysql_native_password
 
   # phpMyAdmin
@@ -61,27 +59,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - web_network
-
-  # Workspace container for development tools
-  workspace:
-    image: devilbox/php-fpm:8.2-work
-    container_name: workspace
-    environment:
-      - PHP_IDE_CONFIG=serverName=localhost
-    volumes:
-      - ./app:/var/www/html
-      - ./workspace:/home/workspace
-      - ./workspace/.bashrc:/home/.bashrc
-      - ./workspace/.gitconfig:/home/.gitconfig
-    working_dir: /var/www/html
-    stdin_open: true
-    tty: true
-    depends_on:
-      - php
-      - mysql
-    networks:
-      - web_network
+      - it302_network
 
   # Redis cache
   redis:
@@ -92,7 +70,7 @@ services:
     volumes:
       - ./redis/data:/data
     networks:
-      - web_network
+      - it302_network
 
   # Mailhog for email testing
   mailhog:
@@ -102,12 +80,8 @@ services:
       - "1025:1025"   # SMTP
       - "8025:8025"   # Web UI
     networks:
-      - web_network
+      - it302_network
 
 networks:
-  web_network:
+  it302_network:
     driver: bridge
-
-volumes:
-  mysql_data:
-    driver: local

@@ -1,9 +1,9 @@
 <?php
 // Database configuration
 define('DB_HOST', 'mysql');
-define('DB_NAME', 'default');
-define('DB_USER', 'default');
-define('DB_PASS', 'default');
+define('DB_NAME', 'it302_anong');
+define('DB_USER', 'it302_anong');
+define('DB_PASS', 'it302_anong');
 
 function getDBConnection() {
     try {
